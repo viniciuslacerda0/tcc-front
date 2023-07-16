@@ -11,5 +11,7 @@ export default sx({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#cccccc',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

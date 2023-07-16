@@ -15,6 +15,9 @@ import PrivateRoute from './PrivateRoute';
 import SignUp from './SignUp';
 import Home from './Home';
 import NotFound from './NotFound';
+import Dashboard from './Dashboard';
+import Evolution from './Evolution';
+import PacientMenu from './PacientMenu';
 
 const SentryRoutes = withSentryReactRouterV6Routing(RoutesContainer);
 
@@ -22,6 +25,9 @@ const routesMap = {
   [Route.SIGNUP]: SignUp,
   [Route.ROOT]: Home,
   [Route.NOT_FOUND]: NotFound,
+  [Route.DASHBOARD]: Dashboard,
+  [Route.EVOLUTION]: Evolution,
+  [Route.PACIENTMENU]: PacientMenu,
 };
 
 const redirectToNotFound = (): JSX.Element => <Navigate to={Route.NOT_FOUND} />;

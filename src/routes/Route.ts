@@ -22,3 +22,12 @@ export const routesInfo = [
   { path: Route.EVOLUTION, isPrivate: true },
   { path: Route.PACIENTMENU, isPrivate: true },
 ];
+
+export const routesNames = [
+  { path: Route.ROOT, name: '' },
+  { path: Route.SIGNUP, name: 'Cadastrar' },
+  { path: Route.NOT_FOUND, name: 'Pagina Desconhecida' },
+  { path: Route.DASHBOARD, name: 'Menu Inicial' },
+  { path: Route.EVOLUTION, name: 'Evolucao' },
+  { path: Route.PACIENTMENU, name: 'Pacientes' },
+];

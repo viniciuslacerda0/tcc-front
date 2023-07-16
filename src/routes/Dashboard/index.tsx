@@ -40,8 +40,13 @@ const text = {
 
 const Dashboard = (): JSX.Element => {
   const { user } = useUser();
+  console.log('🚀 ~ file: index.tsx:43 ~ Dashboard ~ user:', user);
   const dashboardIcons = icons[user.type as UserType];
   const dashboardText = text[user.type as UserType];
+  console.log(
+    '🚀 ~ file: index.tsx:46 ~ Dashboard ~ dashboardText:',
+    dashboardText,
+  );
 
   return (
     <Stack sx={styles.container}>

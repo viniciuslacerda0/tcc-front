@@ -9,7 +9,7 @@ import {
 import { useSnackbar } from 'notistack';
 import type { BaseSyntheticEvent, ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import Header from 'components/Header';
 
@@ -31,17 +31,19 @@ const Home = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, setState] = useState<LoginState>(INITIAL_STATE);
+  const navigate = useNavigate();
 
   const handleLogin = useCallback(
     async (e: BaseSyntheticEvent) => {
       e.preventDefault();
       try {
         console.log(`login success`);
+        navigate(Route.DASHBOARD);
       } catch (error) {
         enqueueSnackbar('login.loginErrorMessage');
       }
     },
-    [enqueueSnackbar],
+    [enqueueSnackbar, navigate],
   );
   const onChangeTextField = useCallback(
     (event: ChangeEvent<{ value: string; name: string }>): void =>

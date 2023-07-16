@@ -6,6 +6,7 @@ export default sx({
     alignItems: `center`,
     textAlign: 'center',
     justifyItems: 'center',
-    maxWidth: 345,
+    minWidth: '7rem',
+    maxWidth: '30rem',
   },
 });
