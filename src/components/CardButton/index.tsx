@@ -7,11 +7,12 @@ import styles from './styles';
 interface CardButtonProps {
   icon: ReactNode;
   text: string;
+  to?: () => void;
 }
 
-const CardButton = ({ text, icon }: CardButtonProps): JSX.Element => {
+const CardButton = ({ text, icon, to }: CardButtonProps): JSX.Element => {
   return (
-    <Card sx={styles.card}>
+    <Card sx={styles.card} onClick={to}>
       <CardActionArea>
         <CardContent>
           {icon}

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-interface ModalHook {
+export interface ModalHook {
   isOpen: boolean;
   handleOpen: () => void;
   handleClose: () => void;

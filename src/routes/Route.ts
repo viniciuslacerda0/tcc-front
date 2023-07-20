@@ -5,6 +5,7 @@ const Route = {
   DASHBOARD: '/dashboard',
   EVOLUTION: '/evolution',
   PACIENTMENU: '/pacient_menu',
+  PACIENT: '/pacients',
   UNKNOWN_ROUTE: '*',
 };
 
@@ -21,6 +22,7 @@ export const routesInfo = [
   { path: Route.DASHBOARD, isPrivate: true },
   { path: Route.EVOLUTION, isPrivate: true },
   { path: Route.PACIENTMENU, isPrivate: true },
+  { path: Route.PACIENT, isPrivate: true },
 ];
 
 export const routesNames = [
@@ -30,4 +32,5 @@ export const routesNames = [
   { path: Route.DASHBOARD, name: 'Menu Inicial' },
   { path: Route.EVOLUTION, name: 'Evolucao' },
   { path: Route.PACIENTMENU, name: 'Pacientes' },
+  { path: Route.PACIENT, name: 'Pacientes' },
 ];

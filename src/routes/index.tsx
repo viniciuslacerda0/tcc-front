@@ -18,6 +18,7 @@ import NotFound from './NotFound';
 import Dashboard from './Dashboard';
 import Evolution from './Evolution';
 import PacientMenu from './PacientMenu';
+import Pacient from './Pacient';
 
 const SentryRoutes = withSentryReactRouterV6Routing(RoutesContainer);
 
@@ -28,6 +29,7 @@ const routesMap = {
   [Route.DASHBOARD]: Dashboard,
   [Route.EVOLUTION]: Evolution,
   [Route.PACIENTMENU]: PacientMenu,
+  [Route.PACIENT]: Pacient,
 };
 
 const redirectToNotFound = (): JSX.Element => <Navigate to={Route.NOT_FOUND} />;
