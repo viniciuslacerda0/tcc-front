@@ -1,17 +1,14 @@
-import {
-  Box,
-  Typography,
-  List,
-  Stack,
-  TextField,
-  IconButton,
-} from '@mui/material';
+import { Typography, List, Stack, TextField, IconButton } from '@mui/material';
 import type { ChangeEvent } from 'react';
 import { useCallback, useMemo, useState } from 'react';
 
 import { Delete, OpenInNewOutlined } from '@mui/icons-material';
 
+import { useNavigate } from 'react-router-dom';
+
 import ListItem from 'components/ListItem';
+
+import Route from 'routes/Route';
 
 import styles from './styles';
 
@@ -50,6 +47,7 @@ const mockData: PacientInterface[] = [
 ];
 
 const Pacient = (): JSX.Element => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
   const [rows, setRows] = useState<PacientInterface[] | undefined>(mockData);
@@ -59,6 +57,13 @@ const Pacient = (): JSX.Element => {
       setSearch(event.target.value);
     },
     [],
+  );
+
+  const goToPacient = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>): void => {
+      navigate(Route.PACIENTMENU, { state: { id: event.currentTarget.name } });
+    },
+    [navigate],
   );
 
   const removeUser = useCallback(() => {}, []);
@@ -76,7 +81,7 @@ const Pacient = (): JSX.Element => {
             <Typography variant="body2">{row.cpf}</Typography>
             <Typography>{row.name}</Typography>
             <Stack flexDirection="row">
-              <IconButton>
+              <IconButton name={`${row.id}`} onClick={goToPacient}>
                 <OpenInNewOutlined />
               </IconButton>
               <IconButton onClick={removeUser}>
@@ -86,7 +91,7 @@ const Pacient = (): JSX.Element => {
           </Stack>
         </ListItem>
       )),
-    [removeUser, rows],
+    [goToPacient, removeUser, rows],
   );
 
   return (

@@ -40,7 +40,7 @@ const Home = (): JSX.Element => {
         console.log(`login success`);
         navigate(Route.DASHBOARD);
       } catch (error) {
-        enqueueSnackbar('login.loginErrorMessage');
+        enqueueSnackbar('Erro ao realizar o login');
       }
     },
     [enqueueSnackbar, navigate],

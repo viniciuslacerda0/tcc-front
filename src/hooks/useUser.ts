@@ -22,7 +22,7 @@ const wipeUser = (): void => {
 };
 
 export const useUser = (): UseTokenReturn => {
-  const user = loadUserFromStorage() ?? { type: 'professional' };
+  const user = loadUserFromStorage() ?? { type: 'professional', id: 1 };
 
   return {
     user,

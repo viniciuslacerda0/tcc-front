@@ -52,9 +52,9 @@ const Dashboard = (): JSX.Element => {
 
   const goToFirstCard = useCallback(() => {
     if (user.type === UserType.PROFESSIONAL) {
-      navigate(Route.DASHBOARD);
+      navigate(Route.REPORT);
     } else {
-      navigate(Route.DASHBOARD);
+      navigate(Route.REPORT, { state: { id: user.id } });
     }
   }, [navigate, user]);
 
@@ -62,7 +62,7 @@ const Dashboard = (): JSX.Element => {
     if (user.type === UserType.PROFESSIONAL) {
       navigate(Route.PACIENT);
     } else {
-      navigate(Route.EVOLUTION);
+      navigate(Route.EVOLUTION, { state: { id: user.id } });
     }
   }, [navigate, user]);
 

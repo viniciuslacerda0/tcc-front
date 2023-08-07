@@ -15,17 +15,28 @@ import { useToken } from 'hooks/useToken';
 
 import Route from 'routes/Route';
 
+import { useUser } from 'hooks/useUser';
+
+import { UserType } from 'routes/Dashboard';
+
 import type { DrawerProps } from '../types';
 import Drawer from '..';
 
-const drawerRoutes = [
+const drawerProfessionalRoutes = [
   { path: Route.DASHBOARD, name: 'Menu Inicial' },
-  { path: Route.EVOLUTION, name: 'Evolucao' },
-  { path: Route.PACIENTMENU, name: 'Pacientes' },
+  { path: Route.REPORT, name: 'Cadastrar paciente' },
+  { path: Route.PACIENT, name: 'Pacientes' },
+];
+
+const drawerPacientRoutes = [
+  { path: Route.DASHBOARD, name: 'Menu Inicial' },
+  { path: Route.REPORT, name: 'Meus dados' },
+  { path: Route.EVOLUTION, name: 'Evolução' },
 ];
 
 const Menu = ({ onClose, isOpen, anchor }: DrawerProps): JSX.Element => {
   const navigate = useNavigate();
+  const { user } = useUser();
   const { wipeToken } = useToken();
 
   const handleLogout = useCallback(() => {
@@ -36,7 +47,10 @@ const Menu = ({ onClose, isOpen, anchor }: DrawerProps): JSX.Element => {
   const RoutesList = useMemo(
     () => (
       <List>
-        {drawerRoutes.map(({ path, name }) => (
+        {(user.type === UserType.PROFESSIONAL
+          ? drawerProfessionalRoutes
+          : drawerPacientRoutes
+        ).map(({ path, name }) => (
           <ListItem key={path}>
             <ListItemButton component={Link} to={path} aria-label={path}>
               <ListItemText primary={name} />
