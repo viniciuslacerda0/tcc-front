@@ -1,11 +1,18 @@
 import { Dialog, Typography, Button, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import type { ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
 
 interface EvolutionModalProps {
   isOpen: boolean;
   handleClose: () => void;
+}
+
+interface EvolutionModalState {
+  text: string;
+  date: string;
+  photos: File[];
 }
 
 const INITIAL_STATE = {
@@ -18,7 +25,7 @@ const EditEvolutionModal = ({
   isOpen = false,
   handleClose,
 }: EvolutionModalProps): JSX.Element => {
-  const [formData, setFormData] = useState<typeof INITIAL_STATE>(INITIAL_STATE);
+  const [formData, setFormData] = useState<EvolutionModalState>(INITIAL_STATE);
 
   const handleForm = useCallback(
     (event: ChangeEvent<{ value: string; name: string }>): void => {
@@ -37,6 +44,16 @@ const EditEvolutionModal = ({
       console.error(error);
     }
   }, [formData]);
+
+  const uploadFile = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (files) {
+      setFormData(prevData => ({
+        ...prevData,
+        photos: [...prevData.photos, ...files],
+      }));
+    }
+  }, []);
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
@@ -59,7 +76,15 @@ const EditEvolutionModal = ({
         </Stack>
         <Stack>
           <Typography variant="h4">Fotos:</Typography>
-          <TextField type="image" name="photos" onChange={handleForm} />
+          <Button
+            component="label"
+            variant="outlined"
+            startIcon={<UploadFileIcon />}
+            sx={{ marginRight: '1rem' }}
+          >
+            Adicionar Fotos
+            <input type="file" accept=".csv" hidden onChange={uploadFile} />
+          </Button>
         </Stack>
         <Button
           variant="contained"

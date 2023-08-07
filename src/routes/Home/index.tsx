@@ -9,7 +9,7 @@ import {
 import { useSnackbar } from 'notistack';
 import type { BaseSyntheticEvent, ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Header from 'components/Header';
 
@@ -84,15 +84,6 @@ const Home = (): JSX.Element => {
               type="submit"
             >
               Login
-            </Button>
-            <Button
-              variant="text"
-              color="info"
-              size="large"
-              component={RouterLink}
-              to={Route.SIGNUP}
-            >
-              Criar Conta
             </Button>
           </FormControl>
         </Stack>
