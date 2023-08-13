@@ -8,7 +8,7 @@ import {
 
 import { useSnackbar } from 'notistack';
 import type { BaseSyntheticEvent, ChangeEvent } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
@@ -36,7 +36,7 @@ const Home = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
   const [data, setState] = useState<LoginState>(INITIAL_STATE);
   const { updateUser } = useUser();
-  const { updateToken } = useToken();
+  const { token, updateToken } = useToken();
   const navigate = useNavigate();
 
   const handleLogin = useCallback(
@@ -61,6 +61,12 @@ const Home = (): JSX.Element => {
       })),
     [setState],
   );
+
+  useEffect(() => {
+    if (token) {
+      navigate(Route.DASHBOARD);
+    }
+  }, [navigate, token]);
 
   return (
     <Container sx={styles.verticalContainer}>

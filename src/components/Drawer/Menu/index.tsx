@@ -36,13 +36,14 @@ const drawerPacientRoutes = [
 
 const Menu = ({ onClose, isOpen, anchor }: DrawerProps): JSX.Element => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, wipeUser } = useUser();
   const { wipeToken } = useToken();
 
   const handleLogout = useCallback(() => {
     wipeToken();
+    wipeUser();
     navigate(Route.ROOT);
-  }, [navigate, wipeToken]);
+  }, [navigate, wipeToken, wipeUser]);
 
   const RoutesList = useMemo(
     () => (

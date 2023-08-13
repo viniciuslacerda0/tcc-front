@@ -10,6 +10,10 @@ export default sx({
     display: 'flex',
     justifyContent: 'flex-start',
   },
+  profileContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
   icon: {
     height: theme => theme.spacing(3.75),
     width: theme => theme.spacing(3.75),
