@@ -2,6 +2,8 @@ import type { ReactElement } from 'react';
 import ReactDOM from 'react-dom/client';
 import { SnackbarProvider } from 'notistack';
 
+import * as Sentry from '@sentry/react';
+
 import { setupAxios } from 'services';
 import Logging from 'services/logging';
 
@@ -25,4 +27,6 @@ const AppContainer = (): ReactElement => (
   </Theme>
 );
 
-root.render(<AppContainer />);
+const App = Sentry.withProfiler(AppContainer);
+
+root.render(<App />);

@@ -13,6 +13,7 @@ const onRequest = (config: AxiosRequestConfig): AxiosRequestConfig => {
   config.headers = {
     ...config.headers,
     Authorization: `Bearer ${storageToken ?? ``}`,
+    'Document-Policy': 'js-profiling',
   };
   return config;
 };
