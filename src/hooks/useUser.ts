@@ -8,7 +8,7 @@ interface UseTokenReturn {
 const loadUserFromStorage = (): string | null => {
   const storageUser = window.localStorage.getItem('user');
   if (storageUser) {
-    return storageUser;
+    return JSON.parse(storageUser);
   }
   return null;
 };
@@ -22,7 +22,7 @@ const wipeUser = (): void => {
 };
 
 export const useUser = (): UseTokenReturn => {
-  const user = loadUserFromStorage() ?? { type: 'professional', id: 1 };
+  const user = loadUserFromStorage();
 
   return {
     user,

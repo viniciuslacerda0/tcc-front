@@ -1,10 +1,12 @@
 import { Dialog, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
+import { useMemo } from 'react';
 
 interface EvolutionForm {
   created_at: string;
   text: string;
   id: number;
+  pictures: string[];
 }
 
 interface EvolutionModalProps {
@@ -18,6 +20,14 @@ const EvolutionModal = ({
   handleClose,
   data,
 }: EvolutionModalProps): JSX.Element => {
+  const pictures = useMemo(() => {
+    if (!data) return [];
+    return data.pictures.map((picture, index) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <img key={`ev-pic-${index}`} src={picture} alt="Foto" />
+    ));
+  }, [data]);
+
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <Stack flexDirection="column" padding={3} gap={4}>
@@ -35,6 +45,9 @@ const EvolutionModal = ({
             </Stack>
             <Stack>
               <Typography variant="h4">Fotos:</Typography>
+              <Stack flexDirection="row" gap={1}>
+                {pictures}
+              </Stack>
             </Stack>
           </>
         ) : (

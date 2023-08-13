@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 
 import type { ChangeEvent } from 'react';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { ClinicalPhysicalExamState } from 'hooks/useFormData';
 import {
@@ -21,7 +21,7 @@ const PhysicalExam = ({
 }: TabsProps): JSX.Element => {
   const { updateData, data: formData } = useFormData();
   const [data, setState] = useState<ClinicalPhysicalExamState>(
-    pacientData ?? CLINICAL_PHYSICAL_EXAM_INITIAL_STATE,
+    CLINICAL_PHYSICAL_EXAM_INITIAL_STATE,
   );
 
   const onChangeTextField = useCallback(
@@ -34,8 +34,14 @@ const PhysicalExam = ({
   );
 
   const onSave = useCallback(() => {
-    updateData({ ...formData, ...data });
+    updateData({ ...formData, clinicalPhysicalExamData: data });
   }, [data, formData, updateData]);
+
+  useEffect(() => {
+    if (pacientData?.clinicalPhysicalExamData) {
+      setState(pacientData.clinicalPhysicalExamData);
+    }
+  }, [pacientData]);
 
   return (
     <div
@@ -80,9 +86,9 @@ const PhysicalExam = ({
             disabled={disableField}
             fullWidth
             label="Inspeção"
-            name="introspection"
+            name="instrospection"
             multiline
-            value={data.introspection}
+            value={data.instrospection}
             onChange={onChangeTextField}
           />
         </Grid>

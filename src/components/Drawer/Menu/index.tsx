@@ -59,7 +59,7 @@ const Menu = ({ onClose, isOpen, anchor }: DrawerProps): JSX.Element => {
         ))}
       </List>
     ),
-    [],
+    [user.type],
   );
 
   return (

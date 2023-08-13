@@ -18,7 +18,7 @@ import { Box } from '@mui/system';
 
 import type { ChangeEvent } from 'react';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { AvaliationDataState, BreathingPattern } from 'hooks/useFormData';
 import { useFormData, AVALIATION_DATA_INITIAL_STATE } from 'hooks/useFormData';
@@ -34,7 +34,7 @@ const Avaliation = ({
 }: TabsProps): JSX.Element => {
   const { updateData, data: formData } = useFormData();
   const [data, setState] = useState<AvaliationDataState>(
-    pacientData ?? AVALIATION_DATA_INITIAL_STATE,
+    AVALIATION_DATA_INITIAL_STATE,
   );
 
   const onChangeTextField = useCallback(
@@ -67,8 +67,14 @@ const Avaliation = ({
     [setState],
   );
   const onSave = useCallback(() => {
-    updateData({ ...formData, ...data });
+    updateData({ ...formData, avaliationData: data });
   }, [data, formData, updateData]);
+
+  useEffect(() => {
+    if (pacientData?.avaliationData) {
+      setState(pacientData.avaliationData);
+    }
+  }, [pacientData]);
 
   return (
     <div
@@ -177,15 +183,15 @@ const Avaliation = ({
             <InputLabel id="breathingPattern">Padrão Respiratorio</InputLabel>
             <Select
               labelId="breathingPattern"
-              value={data.breathingPattern}
+              value={data.breathingType}
               label="Padrão Respiratorio"
               disabled={disableField}
               onChange={onChangeSelect}
               fullWidth
             >
-              <MenuItem value="diafragmático">Diafragmático</MenuItem>
-              <MenuItem value="costal">Costal</MenuItem>
-              <MenuItem value="misto">Misto</MenuItem>
+              <MenuItem value="DIAFRAGMATICO">Diafragmático</MenuItem>
+              <MenuItem value="COSTAL">Costal</MenuItem>
+              <MenuItem value="MISTO">Misto</MenuItem>
             </Select>
           </FormControl>
         </Grid>

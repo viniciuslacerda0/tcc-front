@@ -12,7 +12,7 @@ import { Box } from '@mui/system';
 
 import type { ChangeEvent } from 'react';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { ClinicalDataState } from 'hooks/useFormData';
 import { useFormData, CLINICAL_DATA_INITIAL_STATE } from 'hooks/useFormData';
@@ -27,7 +27,7 @@ const ClinicHistory = ({
 }: TabsProps): JSX.Element => {
   const { updateData, data: formData } = useFormData();
   const [data, setState] = useState<ClinicalDataState>(
-    pacientData ?? CLINICAL_DATA_INITIAL_STATE,
+    CLINICAL_DATA_INITIAL_STATE,
   );
 
   const onChangeTextField = useCallback(
@@ -40,8 +40,14 @@ const ClinicHistory = ({
   );
 
   const onSave = useCallback(() => {
-    updateData({ ...formData, ...data });
+    updateData({ ...formData, clinicalData: data });
   }, [data, formData, updateData]);
+
+  useEffect(() => {
+    if (pacientData?.clinicalData) {
+      setState(pacientData.clinicalData);
+    }
+  }, [pacientData]);
 
   return (
     <div

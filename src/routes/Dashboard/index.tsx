@@ -18,8 +18,8 @@ import Route from 'routes/Route';
 import styles from './styles';
 
 export enum UserType {
-  PROFESSIONAL = 'professional',
-  PACIENT = 'pacient',
+  PROFESSIONAL = 'PROFESSIONAL',
+  PACIENT = 'PACIENT',
 }
 
 const icons = {

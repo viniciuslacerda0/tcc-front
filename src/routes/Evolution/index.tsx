@@ -1,12 +1,16 @@
-import { Box, Typography, List, Stack, Input, TextField } from '@mui/material';
+import { Box, Typography, List, Stack, TextField } from '@mui/material';
 import type { ChangeEvent } from 'react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import axios from 'axios';
+
+import { useLocation } from 'react-router-dom';
+
+import { useSnackbar } from 'notistack';
 
 import ListItem from 'components/ListItem';
 
 import { useModal } from 'hooks/useModal';
-
-import { useUser } from 'hooks/useUser';
 
 import styles from './styles';
 import EvolutionModal from './EvolutionModal';
@@ -16,6 +20,7 @@ interface EvolutionInterface {
   name: string;
   text: string;
   created_at: string;
+  pictures: string[];
 }
 
 interface EvolutionForm {
@@ -23,60 +28,21 @@ interface EvolutionForm {
   name: string;
   text: string;
   id: number;
+  pictures: string[];
 }
 
-const mockData: EvolutionInterface[] = [
-  {
-    id: 1,
-    name: 'Evolution 1',
-    created_at: '2023-07-01',
-    text: '',
-  },
-  {
-    id: 2,
-    name: 'Evolution 2',
-    created_at: '2023-07-02',
-    text: '',
-  },
-  {
-    id: 3,
-    name: 'Evolution 3',
-    created_at: '2023-07-03',
-    text: '',
-  },
-  {
-    id: 4,
-    name: 'Evolution 4',
-    created_at: '2023-07-04',
-    text: '',
-  },
-  {
-    id: 5,
-    name: 'Evolution 5',
-    created_at: '2023-07-05',
-    text: '',
-  },
-];
-
 const Evolution = (): JSX.Element => {
-  const [evolutions, setEvolutions] = useState<
-    EvolutionInterface[] | undefined
-  >(mockData);
-  const { user } = useUser();
+  const { state } = useLocation();
   const [initialDate, setInitialDate] = useState('');
   const [finalDate, setFinalDate] = useState('');
   const { isOpen, handleClose, handleOpen } = useModal();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const [rows, setRows] = useState<EvolutionInterface[] | undefined>(mockData);
+  const [rows, setRows] = useState<EvolutionInterface[] | undefined>([]);
 
   const [evolutionFormState, setEvolutionFormState] = useState<
     EvolutionForm | undefined
   >();
-
-  const handleSearch = useCallback(
-    (event: ChangeEvent<HTMLInputElement>): void => {},
-    [],
-  );
 
   const setGroupFormStateHandler = useCallback(
     (newFormState: EvolutionForm | undefined) => {
@@ -86,18 +52,46 @@ const Evolution = (): JSX.Element => {
     [handleOpen],
   );
 
+  useEffect(() => {
+    axios
+      .get('get-evolution', {
+        params: {
+          pacientId: state.id,
+          filter: {
+            from: initialDate,
+            until: finalDate,
+            textFilter: '',
+          },
+          cursor: '',
+        },
+      })
+      .then(response => {
+        setRows(response.data);
+      })
+      .catch(() =>
+        enqueueSnackbar('Ocorreu um erro ao resgatar evolucao', {
+          variant: 'error',
+        }),
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const rowData = useMemo(
     () =>
-      rows?.map(row => (
-        <ListItem key={row.id}>
-          <Box onClick={(): void => setGroupFormStateHandler(row)}>
-            <Typography>{row.name}</Typography>
-            <Typography>
-              {new Date(row.created_at).toLocaleDateString()}
-            </Typography>
-          </Box>
-        </ListItem>
-      )),
+      rows && rows.length > 0 ? (
+        rows.map(row => (
+          <ListItem key={row.id}>
+            <Box onClick={(): void => setGroupFormStateHandler(row)}>
+              <Typography>{row.name}</Typography>
+              <Typography>
+                {new Date(row.created_at).toLocaleDateString()}
+              </Typography>
+            </Box>
+          </ListItem>
+        ))
+      ) : (
+        <Typography>Nenhum dado encontrado para esse relatorio</Typography>
+      ),
     [rows, setGroupFormStateHandler],
   );
 

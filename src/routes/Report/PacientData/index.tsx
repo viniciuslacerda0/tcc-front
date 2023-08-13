@@ -1,7 +1,7 @@
 import { Box, Button, Grid, TextField } from '@mui/material';
 
 import type { ChangeEvent } from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import type { PacientDataState } from 'hooks/useFormData';
 import { useFormData, PACIENT_DATA_INITIAL_STATE } from 'hooks/useFormData';
@@ -16,11 +16,11 @@ const PacientData = ({
 }: TabsProps): JSX.Element => {
   const { updateData, data: formData } = useFormData();
   const [data, setState] = useState<PacientDataState>(
-    pacientData ?? PACIENT_DATA_INITIAL_STATE,
+    PACIENT_DATA_INITIAL_STATE,
   );
 
   const onChangeTextField = useCallback(
-    (event: ChangeEvent<{ value: string; name: string }>): void =>
+    (event: ChangeEvent<{ value: string | number; name: string }>): void =>
       setState(prevState => ({
         ...prevState,
         [event.target.name]: event.target.value,
@@ -28,8 +28,14 @@ const PacientData = ({
     [setState],
   );
 
+  useEffect(() => {
+    if (pacientData?.pacientData) {
+      setState(pacientData.pacientData);
+    }
+  }, [pacientData]);
+
   const onSave = useCallback(() => {
-    updateData({ ...formData, ...data });
+    updateData({ ...formData, pacientData: data });
   }, [data, formData, updateData]);
 
   return (
@@ -57,6 +63,7 @@ const PacientData = ({
             label="Idade"
             name="age"
             value={data.age}
+            type="number"
             onChange={onChangeTextField}
           />
         </Grid>
@@ -155,8 +162,12 @@ const PacientData = ({
             disabled={disableField}
             fullWidth
             label="Data de Atendimento"
-            name="consultationData"
-            value={data.consultationData}
+            name="consultationDate"
+            value={
+              pacientData
+                ? new Date(data.consultationDate).toLocaleDateString()
+                : data.consultationDate
+            }
             onChange={onChangeTextField}
           />
         </Grid>

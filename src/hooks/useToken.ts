@@ -20,7 +20,7 @@ const wipeToken = (): void => {
 };
 
 export const useToken = (): UseTokenReturn => {
-  const token = loadTokenFromStorage() ?? 'mocked';
+  const token = loadTokenFromStorage();
 
   return {
     token,

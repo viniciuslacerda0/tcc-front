@@ -33,15 +33,21 @@ const Report = (): JSX.Element => {
   );
 
   const fetchData = useCallback(async () => {
-    const response = await axios.get(`/pacient/${state.id}`);
+    const response = await axios.get(`/get-report`, {
+      params: {
+        pacientId: state.id,
+      },
+    });
     setPacientData(response.data);
   }, [state]);
 
   useEffect(() => {
     if (state?.id) {
+      // eslint-disable-next-line no-console
       fetchData().catch(err => console.log(err));
     }
-  }, [fetchData, state]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Stack sx={styles.container}>

@@ -19,8 +19,8 @@ const PacientMenu = (): JSX.Element => {
   const { state } = useLocation();
   const { isOpen, handleOpen, handleClose } = useModal();
   const goToEvolution = useCallback(() => {
-    navigate(Route.EVOLUTION);
-  }, [navigate]);
+    navigate(Route.EVOLUTION, { state });
+  }, [navigate, state]);
   const goToReport = useCallback(() => {
     navigate(Route.REPORT, { state });
   }, [navigate, state]);
@@ -42,7 +42,11 @@ const PacientMenu = (): JSX.Element => {
         text="Mostrar Evolucao"
         to={goToEvolution}
       />
-      <EditEvolutionModal isOpen={isOpen} handleClose={handleClose} />
+      <EditEvolutionModal
+        isOpen={isOpen}
+        handleClose={handleClose}
+        pacientData={state}
+      />
     </Stack>
   );
 };

@@ -11,9 +11,14 @@ import type { BaseSyntheticEvent, ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import axios from 'axios';
+
 import Header from 'components/Header';
 
 import Route from 'routes/Route';
+
+import { useUser } from 'hooks/useUser';
+import { useToken } from 'hooks/useToken';
 
 import styles from './styles';
 
@@ -29,21 +34,24 @@ const INITIAL_STATE: LoginState = {
 
 const Home = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [data, setState] = useState<LoginState>(INITIAL_STATE);
+  const { updateUser } = useUser();
+  const { updateToken } = useToken();
   const navigate = useNavigate();
 
   const handleLogin = useCallback(
     async (e: BaseSyntheticEvent) => {
       e.preventDefault();
       try {
-        console.log(`login success`);
+        const response = await axios.post('auth/', data);
+        updateUser(response);
+        updateToken(response.data.token);
         navigate(Route.DASHBOARD);
       } catch (error) {
         enqueueSnackbar('Erro ao realizar o login');
       }
     },
-    [enqueueSnackbar, navigate],
+    [data, enqueueSnackbar, navigate, updateToken, updateUser],
   );
   const onChangeTextField = useCallback(
     (event: ChangeEvent<{ value: string; name: string }>): void =>

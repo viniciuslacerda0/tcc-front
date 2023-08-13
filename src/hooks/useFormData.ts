@@ -10,7 +10,7 @@ export interface PacientDataState {
   profession: string;
   address: string;
   cellphone: string;
-  consultationData: string;
+  consultationDate: string;
   consultatedBy: string;
   reasonForConsultation: string;
   followUp: string;
@@ -36,7 +36,7 @@ export interface ClinicalPhysicalExamState {
   pa: string;
   fc: string;
   fr: string;
-  introspection: string;
+  instrospection: string;
   palpation: string;
   marchType: string;
   articulationAmplitude: string;
@@ -46,7 +46,7 @@ export interface ClinicalPhysicalExamState {
   complementaryExams: string;
 }
 
-export type BreathingPattern = 'diafragmático' | 'costal' | 'misto';
+export type BreathingPattern = 'DIAFRAGMATICO' | 'COSTAL' | 'MISTO';
 
 export interface AvaliationDataState {
   painHappens: boolean;
@@ -60,7 +60,7 @@ export interface AvaliationDataState {
   spasmLocation: string;
   fracture: boolean;
   fractureLocation: string;
-  breathingPattern: BreathingPattern;
+  breathingType: BreathingPattern;
   cognitiveDeficit: boolean;
   auditoryDeficit: boolean;
   visualDeficit: boolean;
@@ -73,11 +73,13 @@ export interface TreatmentDataState {
   observations: string;
 }
 
-export type FormData = PacientDataState &
-  ClinicalDataState &
-  ClinicalPhysicalExamState &
-  AvaliationDataState &
-  TreatmentDataState;
+export type FormData = {
+  pacientData: PacientDataState;
+  clinicalData: ClinicalDataState;
+  clinicalPhysicalExamData: ClinicalPhysicalExamState;
+  avaliationData: AvaliationDataState;
+  treatmentData: TreatmentDataState;
+};
 
 export const PACIENT_DATA_INITIAL_STATE: PacientDataState = {
   name: '',
@@ -91,7 +93,7 @@ export const PACIENT_DATA_INITIAL_STATE: PacientDataState = {
   profession: '',
   address: '',
   cellphone: '',
-  consultationData: '',
+  consultationDate: '',
   consultatedBy: '',
   reasonForConsultation: '',
   followUp: '',
@@ -119,7 +121,7 @@ export const CLINICAL_PHYSICAL_EXAM_INITIAL_STATE: ClinicalPhysicalExamState = {
   articulationAmplitude: '',
   goniometry: '',
   muscleStrength: '',
-  introspection: '',
+  instrospection: '',
   marchType: '',
   pa: '',
   palpation: '',
@@ -128,7 +130,7 @@ export const CLINICAL_PHYSICAL_EXAM_INITIAL_STATE: ClinicalPhysicalExamState = {
 };
 
 export const AVALIATION_DATA_INITIAL_STATE: AvaliationDataState = {
-  breathingPattern: 'diafragmático',
+  breathingType: 'DIAFRAGMATICO',
   characteristics: '',
   cognitiveDeficit: false,
   fracture: false,
@@ -153,11 +155,11 @@ export const TREATMENT_DATA_INITIAL_STATE: TreatmentDataState = {
 };
 
 const INITIAL_STATE: FormData = {
-  ...PACIENT_DATA_INITIAL_STATE,
-  ...CLINICAL_DATA_INITIAL_STATE,
-  ...CLINICAL_PHYSICAL_EXAM_INITIAL_STATE,
-  ...AVALIATION_DATA_INITIAL_STATE,
-  ...TREATMENT_DATA_INITIAL_STATE,
+  pacientData: PACIENT_DATA_INITIAL_STATE,
+  clinicalData: CLINICAL_DATA_INITIAL_STATE,
+  clinicalPhysicalExamData: CLINICAL_PHYSICAL_EXAM_INITIAL_STATE,
+  avaliationData: AVALIATION_DATA_INITIAL_STATE,
+  treatmentData: TREATMENT_DATA_INITIAL_STATE,
 };
 
 interface UseFormDataReturn {
