@@ -190,6 +190,7 @@ const updateData = (formData: FormData): void => {
 
 const wipeData = (): void => {
   window.localStorage.removeItem('formData');
+  window.localStorage.setItem('formData', JSON.stringify(INITIAL_STATE));
 };
 
 export const useFormData = (): UseFormDataReturn => {

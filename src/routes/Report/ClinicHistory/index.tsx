@@ -30,6 +30,15 @@ const ClinicHistory = ({
     CLINICAL_DATA_INITIAL_STATE,
   );
 
+  const onChangeRadio = useCallback(
+    (event: ChangeEvent<{ value: string; name: string }>): void =>
+      setState(prevState => ({
+        ...prevState,
+        [event.target.name]: event.target.value === 'true',
+      })),
+    [setState],
+  );
+
   const onChangeTextField = useCallback(
     (event: ChangeEvent<{ value: string; name: string }>): void =>
       setState(prevState => ({
@@ -128,7 +137,7 @@ const ClinicHistory = ({
               row
               value={data.hasHas}
               name="hasHas"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value
@@ -151,7 +160,7 @@ const ClinicHistory = ({
               row
               value={data.isSmoker}
               name="isSmoker"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value
@@ -174,7 +183,7 @@ const ClinicHistory = ({
               row
               value={data.hasAllergy}
               name="hasAllergy"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value
@@ -197,7 +206,7 @@ const ClinicHistory = ({
               row
               value={data.hasDiabetes}
               name="hasDiabetes"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value
@@ -220,7 +229,7 @@ const ClinicHistory = ({
               row
               value={data.isObese}
               name="isObese"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value
@@ -243,7 +252,7 @@ const ClinicHistory = ({
               row
               value={data.hasPneumonia}
               name="hasPneumonia"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value
@@ -266,7 +275,7 @@ const ClinicHistory = ({
               row
               value={data.isCardiopath}
               name="isCardiopath"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value

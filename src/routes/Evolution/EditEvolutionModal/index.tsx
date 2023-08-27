@@ -1,5 +1,12 @@
-import { Dialog, Typography, Button, TextField } from '@mui/material';
-import { Stack } from '@mui/system';
+import {
+  Dialog,
+  Typography,
+  Button,
+  TextField,
+  ImageList,
+  ImageListItem,
+} from '@mui/material';
+import { Box, Stack } from '@mui/system';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import type { ChangeEvent } from 'react';
 import { useCallback, useState } from 'react';
@@ -77,6 +84,7 @@ const EditEvolutionModal = ({
         pacientId: pacientData.id,
         pictures: imageUrls,
       });
+      enqueueSnackbar('Enviado com sucesso');
     } catch (error) {
       enqueueSnackbar('Erro ao enviar os dados');
     }
@@ -121,7 +129,12 @@ const EditEvolutionModal = ({
             sx={{ marginRight: '1rem' }}
           >
             Adicionar Fotos
-            <input type="file" accept=".png" hidden onChange={uploadFile} />
+            <input
+              type="file"
+              accept="image/jpeg, image/png"
+              hidden
+              onChange={uploadFile}
+            />
           </Button>
         </Stack>
         <Button
@@ -133,6 +146,25 @@ const EditEvolutionModal = ({
         >
           Enviar
         </Button>
+
+        <Box>
+          <ImageList cols={3} gap={4}>
+            {formData.pictures.map((picture, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <ImageListItem key={`pic-${index}`}>
+                <img
+                  src={URL.createObjectURL(picture)}
+                  alt={`${index}`}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100px',
+                    objectFit: 'cover',
+                  }}
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
       </Stack>
     </Dialog>
   );

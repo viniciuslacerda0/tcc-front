@@ -163,6 +163,7 @@ const PacientData = ({
             fullWidth
             label="Data de Atendimento"
             name="consultationDate"
+            type={pacientData ? 'text' : 'date'}
             value={
               pacientData
                 ? new Date(data.consultationDate).toLocaleDateString()

@@ -45,7 +45,7 @@ const EvolutionModal = ({
             </Stack>
             <Stack>
               <Typography variant="h4">Fotos:</Typography>
-              <Stack flexDirection="row" gap={1}>
+              <Stack flexDirection="column" gap={1}>
                 {pictures}
               </Stack>
             </Stack>

@@ -36,13 +36,24 @@ const Avaliation = ({
   const [data, setState] = useState<AvaliationDataState>(
     AVALIATION_DATA_INITIAL_STATE,
   );
+  console.log('🚀 ~ file: index.tsx:40 ~ data:', data);
 
   const onChangeTextField = useCallback(
-    (event: ChangeEvent<{ value: string; name: string }>): void =>
+    (event: ChangeEvent<{ value: string | boolean; name: string }>): void =>
       setState(prevState => ({
         ...prevState,
         [event.target.name]: event.target.value,
       })),
+    [setState],
+  );
+
+  const onChangeRadio = useCallback(
+    (event: ChangeEvent<{ value: string; name: string }>): void => {
+      setState(prevState => ({
+        ...prevState,
+        [event.target.name]: event.target.value === 'true',
+      }));
+    },
     [setState],
   );
 
@@ -92,7 +103,7 @@ const Avaliation = ({
               row
               value={data.painHappens}
               name="painHappens"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value
@@ -203,7 +214,7 @@ const Avaliation = ({
               row
               value={data.spasm}
               name="spasm"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value
@@ -234,7 +245,7 @@ const Avaliation = ({
               row
               value={data.fracture}
               name="fracture"
-              onChange={onChangeTextField}
+              onChange={onChangeRadio}
             >
               <FormControlLabel
                 value

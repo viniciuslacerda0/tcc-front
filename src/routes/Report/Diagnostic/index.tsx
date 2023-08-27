@@ -15,7 +15,11 @@ import { TREATMENT_DATA_INITIAL_STATE, useFormData } from 'hooks/useFormData';
 
 import { useUser } from 'hooks/useUser';
 
+import { useModal } from 'hooks/useModal';
+
 import type { TabsProps } from '../types';
+
+import NewLogin from './NewLogin';
 
 const Diagnostic = ({
   id,
@@ -29,6 +33,13 @@ const Diagnostic = ({
   const [data, setState] = useState<TreatmentDataState>(
     TREATMENT_DATA_INITIAL_STATE,
   );
+
+  const [pacientLogin, setPacientLogin] = useState<{
+    email: string;
+    password: string;
+  }>();
+
+  const { handleOpen, handleClose, isOpen } = useModal();
 
   useEffect(() => {
     if (pacientData?.treatmentData) {
@@ -51,13 +62,16 @@ const Diagnostic = ({
         avaliationData: formData.avaliationData,
         treatmentData: data,
       };
-      await axios.post('create-report', fullData);
+      const login = await axios.post('create-report', fullData);
+
+      setPacientLogin(login.data.user);
       wipeData();
       enqueueSnackbar('Relatorio salvo com sucesso');
+      handleOpen();
     } catch (error) {
       enqueueSnackbar('Erro ao salvar dados');
     }
-  }, [data, enqueueSnackbar, formData, user.id, wipeData]);
+  }, [data, enqueueSnackbar, formData, handleOpen, user.id, wipeData]);
 
   const onChangeTextField = useCallback(
     (event: ChangeEvent<{ value: string; name: string }>): void =>
@@ -122,6 +136,13 @@ const Diagnostic = ({
           Salvar
         </Button>
       </Box>
+      {pacientLogin && (
+        <NewLogin
+          data={pacientLogin}
+          handleClose={handleClose}
+          isOpen={isOpen}
+        />
+      )}
     </div>
   );
 };

@@ -1,4 +1,13 @@
-import { Typography, List, Stack, TextField, IconButton } from '@mui/material';
+/* eslint-disable no-magic-numbers */
+/* eslint-disable react/jsx-no-useless-fragment */
+import {
+  Typography,
+  List,
+  Stack,
+  TextField,
+  IconButton,
+  Button,
+} from '@mui/material';
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -12,6 +21,8 @@ import { useSnackbar } from 'notistack';
 
 import ListItem from 'components/ListItem';
 
+import Pagination from 'components/Pagination';
+
 import Route from 'routes/Route';
 
 import { useUser } from 'hooks/useUser';
@@ -19,17 +30,21 @@ import { useUser } from 'hooks/useUser';
 import styles from './styles';
 
 interface PacientInterface {
-  id: number;
-  name: string;
-  cpf: string;
+  totalCount: number;
+  pacients: {
+    id: number;
+    name: string;
+    cpf: string;
+  }[];
 }
 
 const Pacient = (): JSX.Element => {
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const { user } = useUser();
 
-  const [rows, setRows] = useState<PacientInterface[] | undefined>([]);
+  const [rows, setRows] = useState<PacientInterface | undefined>();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSearch = useCallback(
@@ -39,12 +54,81 @@ const Pacient = (): JSX.Element => {
     [],
   );
 
+  const getFilter = useCallback(() => {
+    let filter;
+    if (search) {
+      filter = {
+        filter: {
+          name: search,
+        },
+      };
+    }
+    return filter;
+  }, [search]);
+
+  const fetchSearch = useCallback(() => {
+    const filter = getFilter();
+
+    axios
+      .get('get-pacients', {
+        params: {
+          ...filter,
+          doctorId: user?.id,
+        },
+      })
+      .then(response => {
+        setRows(response.data);
+        setPage(1);
+      })
+      .catch(() => {
+        enqueueSnackbar('Ocorreu um erro ao resgatar pacientes', {
+          variant: 'error',
+        });
+      });
+  }, [enqueueSnackbar, getFilter, user?.id]);
+
+  const handlePagination = useCallback(
+    (value: number) => {
+      if (!rows?.pacients) return;
+      if (value === page) return;
+
+      const { pacients } = rows;
+      let cursor;
+      let backwards = false;
+      if (value > page) {
+        cursor = pacients[pacients.length - 1]?.id ?? 0;
+      } else {
+        cursor = pacients[0]?.id ?? 0;
+        backwards = true;
+      }
+      const filter = getFilter();
+      axios
+        .get('get-pacients', {
+          params: {
+            ...filter,
+            doctorId: user?.id,
+            cursor,
+            backwards,
+          },
+        })
+        .then(response => {
+          setRows(response.data);
+          setPage(value);
+        })
+        .catch(() => {
+          enqueueSnackbar('Ocorreu um erro ao resgatar pacientes', {
+            variant: 'error',
+          });
+        });
+    },
+    [enqueueSnackbar, getFilter, page, rows, user?.id],
+  );
+
   useEffect(() => {
     axios
       .get('get-pacients', {
         params: {
           doctorId: user?.id,
-          name: search,
         },
       })
       .then(response => {
@@ -71,8 +155,8 @@ const Pacient = (): JSX.Element => {
 
   const rowData = useMemo(
     () =>
-      rows && rows.length > 0 ? (
-        rows.map(row => (
+      rows?.pacients && rows.pacients.length > 0 ? (
+        rows.pacients.map(row => (
           <ListItem key={row.id}>
             <Stack
               flexDirection="row"
@@ -114,7 +198,7 @@ const Pacient = (): JSX.Element => {
 
   return (
     <Stack width="90%">
-      <Stack justifyContent="center">
+      <Stack justifyContent="center" flexDirection="row">
         <TextField
           name="search"
           label="Procurar"
@@ -124,8 +208,20 @@ const Pacient = (): JSX.Element => {
           defaultValue={search}
           onChange={handleSearch}
         />
+        <Button variant="contained" onClick={fetchSearch}>
+          Filtrar
+        </Button>
       </Stack>
       <List sx={styles.container}>{rowData}</List>
+      {rows?.totalCount && rows.totalCount > 0 ? (
+        <Pagination
+          total={Math.ceil(rows.totalCount / 5)}
+          page={page}
+          onChange={handlePagination}
+        />
+      ) : (
+        <></>
+      )}
     </Stack>
   );
 };
